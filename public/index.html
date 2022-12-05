@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <title>Dictionary</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">RapidAPI Dictionary</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <!-- <li class="nav-item active mx-5">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li> -->
+                <!-- <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li> -->
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container w-50">
+        <h2 class="my-5 text-center">Search for the word in the dictionary</h2>
+        <form>
+            <div class="form-group">
+                <label for="word"><strong>Enter the word</strong></label>
+                <input type="text" class="form-control" id="word" aria-describedby="emailHelp"
+                    style="background-color: #e6e6e6;">
+            </div>
+            <button id="submit" type="submit" class="btn btn-dark">Search</button>
+        </form>
+        <h4 class="my-3">Result</h4>
+        <p id="result">Choose a word and click search to see result here</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
+
+    <script>
+        submit.addEventListener('click', (e) => {
+            e.preventDefault()
+            let url = `http://localhost:5000/searchWord?entry=${word.value}`;
+            let r = fetch(url);
+            r.then((response) => {
+                return response.json()
+            }).then((resp) => {
+                console.log(resp)
+
+                let htmlStr = `You search for word: <b>${resp.entry}</b><br/><br/>
+                Here are the meaning <ul>`
+                for (let i = 0; i < resp.assoc_word.length; i++) {
+                    const element = resp.assoc_word[i];
+                    htmlStr += `<li>${resp.assoc_word[i]}</li>`
+                }
+                htmlStr += "</ul>"
+
+                htmlStr += `Here are the associate <ul>`
+                for (let i = 0; i < resp.assoc_word_ex.length; i++) {
+                    const element = resp.assoc_word_ex[i];
+                    htmlStr += `<li>${resp.assoc_word_ex[i]}</li>`
+                }
+                htmlStr += "</ul>"
+
+                result.innerHTML = htmlStr;
+                return resp
+            })
+        })
+    </script>
+
+</body>
+
+</html>
